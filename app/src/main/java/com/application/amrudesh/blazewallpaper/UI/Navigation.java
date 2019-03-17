@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 public class Navigation extends AppCompatActivity
@@ -36,7 +35,7 @@ public class Navigation extends AppCompatActivity
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager());
-        viewPageAdapter.AddFragments(new FragmentAll(),"All");
+        viewPageAdapter.AddFragments(new FragmentAll(),"Latest");
         viewPageAdapter.AddFragments(new FragmentTop(),"Top Rated");
         viewPager.setAdapter(viewPageAdapter);
         tabLayout.setupWithViewPager(viewPager);
