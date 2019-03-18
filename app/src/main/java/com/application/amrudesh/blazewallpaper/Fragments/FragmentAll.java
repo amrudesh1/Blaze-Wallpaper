@@ -28,7 +28,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,11 +71,12 @@ public class FragmentAll extends Fragment {
                                 JSONObject url = new JSONObject(jsonObject.getString("urls"));
                                 JSONObject author = new JSONObject(jsonObject.getString("user"));
                                 Wallpaper wallpaper = new Wallpaper();
+                                wallpaper.setId(jsonObject.getString("id"));
                                 wallpaper.setWallpaper_URL(url.getString("small"));
                                 wallpaper.setAuthor_name(author.getString("name"));
                                 wallpaper.setFav_Btn(false);
                                 wallpaperList.add(wallpaper);
-                                Log.i("TAG",wallpaper.getWallpaper_URL());
+                                Log.i("TAG",wallpaper.getId());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

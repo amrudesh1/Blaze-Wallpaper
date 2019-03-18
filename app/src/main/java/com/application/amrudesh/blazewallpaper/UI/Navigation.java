@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.application.amrudesh.blazewallpaper.Adapter.ViewPageAdapter;
+import com.application.amrudesh.blazewallpaper.Model.ViewPageAdapter;
 import com.application.amrudesh.blazewallpaper.Fragments.FragmentAll;
 import com.application.amrudesh.blazewallpaper.Fragments.FragmentTop;
 import com.application.amrudesh.blazewallpaper.R;
@@ -76,9 +76,6 @@ public class Navigation extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
