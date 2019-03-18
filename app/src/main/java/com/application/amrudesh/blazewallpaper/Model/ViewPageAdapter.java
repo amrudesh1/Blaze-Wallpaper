@@ -1,4 +1,4 @@
-package com.application.amrudesh.blazewallpaper.Adapter;
+package com.application.amrudesh.blazewallpaper.Model;
 
 import java.util.ArrayList;
 import java.util.List;

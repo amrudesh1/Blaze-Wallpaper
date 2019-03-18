@@ -6,7 +6,10 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".UI.Navigation">
-
+    <androidx.appcompat.widget.SearchView
+        android:layout_width="match_parent"
+        app:searchIcon="@color/colorPrimary"
+        android:layout_height="?attr/actionBarSize"/>
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

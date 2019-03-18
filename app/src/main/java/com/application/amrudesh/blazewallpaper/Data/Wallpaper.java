@@ -3,9 +3,21 @@ package com.application.amrudesh.blazewallpaper.Data;
 import java.io.Serializable;
 
 public class Wallpaper implements Serializable {
+    private String id;
     private String wallpaper_URL;
     private String author_name;
     private Boolean fav_Btn;
+
+    public Wallpaper() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getWallpaper_URL() {
         return wallpaper_URL;
