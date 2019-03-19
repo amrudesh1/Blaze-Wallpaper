@@ -2,6 +2,7 @@ package com.application.amrudesh.blazewallpaper.Model;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,12 @@ public class NewImageAdapter extends RecyclerView.Adapter<NewImageAdapter.ViewHo
         this.wallpaperList = wallpaperList;
 
     }
-
+    public void setWallpapers(List<Wallpaper> wallpaperList)
+    {
+        this.wallpaperList = wallpaperList;
+        Log.i("Size",String.valueOf(wallpaperList.size()));
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public NewImageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -64,8 +70,9 @@ public class NewImageAdapter extends RecyclerView.Adapter<NewImageAdapter.ViewHo
             mainImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Wallpaper wallpaper = wallpaperList.get(getAdapterPosition());
                     Intent i = new Intent(ctx, BigImageDisplay.class);
-                    i.putExtra("URL",wallpaperList.get(getAdapterPosition()).getId());
+                    i.putExtra("URL",wallpaper);
                     ctx.startActivity(i);
                 }
             });

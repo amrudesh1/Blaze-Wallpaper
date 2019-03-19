@@ -2,12 +2,28 @@ package com.application.amrudesh.blazewallpaper.Data;
 
 import java.io.Serializable;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "wallpaper_table")
 public class Wallpaper implements Serializable {
+    @PrimaryKey
+    @NonNull
     private String id;
     private String wallpaper_URL;
     private String author_name;
     private Boolean fav_Btn;
 
+    public Wallpaper(String id, String wallpaper_URL, String author_name, Boolean fav_Btn) {
+        this.id = id;
+        this.wallpaper_URL = wallpaper_URL;
+        this.author_name = author_name;
+        this.fav_Btn = fav_Btn;
+    }
+
+    @Ignore
     public Wallpaper() {
     }
 
