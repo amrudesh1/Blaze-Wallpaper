@@ -3,8 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".UI.BigImageDisplay">
+
+
+
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -16,7 +20,14 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/this_is_a_image"
             android:scaleType="fitXY" />
-
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="100dp"
+            android:id="@+id/animation_view"
+            android:clickable="true"
+            app:lottie_rawRes="@raw/heart"
+            android:layout_gravity="end"
+            android:layout_height="100dp"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,14 +45,14 @@
                 android:layout_weight="1.0"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:text="@string/set_image" />
+                android:text="@string/downlaod" />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/save_btn"
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:text="@string/save" />
+                android:text="@string/set_image" />
         </LinearLayout>
     </FrameLayout>
 

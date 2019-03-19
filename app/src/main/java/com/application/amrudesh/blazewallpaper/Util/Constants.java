@@ -10,6 +10,6 @@ public class Constants {
     public static String Search_Link_Left ="https://api.unsplash.com/search/photos?per_page=50&query=";
     public static String Search_Link_right="&client_id=" + BuildConfig.ApiKey;
     public static String Download_Link_Left="https://unsplash.com/photos/";
-    public static String Download_Link_Right=" /download";
+    public static String Download_Link_Right="/download";
 
 }
