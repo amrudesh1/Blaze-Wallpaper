@@ -16,4 +16,5 @@
     <string name="this_is_a_image">This is a image</string>
     <string name="download">Download</string>
     <string name="save">Save</string>
+    <string name="set_image">Set Image</string>
 </resources>
