@@ -2,7 +2,6 @@ package com.application.amrudesh.blazewallpaper.UI;
 
 import android.Manifest;
 import android.app.DownloadManager;
-import android.app.usage.ConfigurationStats;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,12 +13,12 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.application.amrudesh.blazewallpaper.BuildConfig;
+import com.application.amrudesh.blazewallpaper.Data.Wallpaper;
+import com.application.amrudesh.blazewallpaper.Data.WallpaperViewModel;
 import com.application.amrudesh.blazewallpaper.R;
 import com.application.amrudesh.blazewallpaper.Util.Constants;
 import com.google.android.material.button.MaterialButton;
@@ -30,6 +29,7 @@ import java.io.File;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,7 +42,9 @@ public class BigImageDisplay extends AppCompatActivity {
     @BindView(R.id.save_btn)
     MaterialButton saveBtn;
     LottieAnimationView animationView;
-    Boolean isPressed = false;
+    Boolean isPressed;
+    WallpaperViewModel wallpaperViewModel;
+    Wallpaper wallpaper;
 
 
     @Override
@@ -51,9 +53,12 @@ public class BigImageDisplay extends AppCompatActivity {
         setContentView(R.layout.activity_big_image_display);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
-        url = getIntent().getStringExtra("URL");
+        wallpaper =(Wallpaper)getIntent().getSerializableExtra("URL");
+        url = wallpaper.getId();
+        Log.i("TAG1",String.valueOf(wallpaper.getFav_Btn()));
         animationView = findViewById(R.id.animation_view);
-
+        isPressed = wallpaper.getFav_Btn();
+        wallpaperViewModel = ViewModelProviders.of(this).get(WallpaperViewModel.class);
         checkPermission();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -72,17 +77,20 @@ public class BigImageDisplay extends AppCompatActivity {
                 setWallaper();
             }
         });
-
+        btnStatus();
         animationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isPressed) {
                     animationView.playAnimation();
                     isPressed = true;
+                    Log.i("tag",String.valueOf(isPressed));
+                    addWallpapertofav(wallpaper.getId(),wallpaper.getWallpaper_URL(),wallpaper.getAuthor_name(),isPressed);
                     Toast.makeText(BigImageDisplay.this, "Image Added To Favourites", Toast.LENGTH_LONG).show();
                 } else {
                     animationView.setProgress(0);
                     isPressed = false;
+                    deleteWallpaper();
                     Toast.makeText(BigImageDisplay.this, "Image Removed To Favourites", Toast.LENGTH_LONG).show();
                 }
             }
@@ -145,6 +153,28 @@ public class BigImageDisplay extends AppCompatActivity {
                 String fileOutput = dirFiles[ii].toString();
                 Log.i("OUTPUT", fileOutput);
             }
+        }
+    }
+
+    public void addWallpapertofav(String id, String url, String auth_name, Boolean btn) {
+        Wallpaper wallpaper = new Wallpaper(id,url,auth_name,btn);
+        wallpaperViewModel.insert(wallpaper);
+    }
+    public void deleteWallpaper()
+    {
+        wallpaperViewModel.delete(wallpaper);
+    }
+
+    public  void btnStatus()
+    {
+        if (isPressed)
+        {
+            animationView.playAnimation();
+            animationView.setProgress(1.0f);
+        }
+        else
+        {
+            animationView.setProgress(0f);
         }
     }
 }
