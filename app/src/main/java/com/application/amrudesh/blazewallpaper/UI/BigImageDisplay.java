@@ -14,8 +14,11 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.application.amrudesh.blazewallpaper.BuildConfig;
 import com.application.amrudesh.blazewallpaper.R;
 import com.application.amrudesh.blazewallpaper.Util.Constants;
@@ -38,6 +41,8 @@ public class BigImageDisplay extends AppCompatActivity {
     MaterialButton downloadBtn;
     @BindView(R.id.save_btn)
     MaterialButton saveBtn;
+    LottieAnimationView animationView;
+    Boolean isPressed = false;
 
 
     @Override
@@ -47,6 +52,8 @@ public class BigImageDisplay extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().hide();
         url = getIntent().getStringExtra("URL");
+        animationView = findViewById(R.id.animation_view);
+
         checkPermission();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -66,7 +73,20 @@ public class BigImageDisplay extends AppCompatActivity {
             }
         });
 
-
+        animationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isPressed) {
+                    animationView.playAnimation();
+                    isPressed = true;
+                    Toast.makeText(BigImageDisplay.this, "Image Added To Favourites", Toast.LENGTH_LONG).show();
+                } else {
+                    animationView.setProgress(0);
+                    isPressed = false;
+                    Toast.makeText(BigImageDisplay.this, "Image Removed To Favourites", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void checkPermission() {
@@ -123,7 +143,7 @@ public class BigImageDisplay extends AppCompatActivity {
             // loops through the array of files, outputing the name to console
             for (int ii = 0; ii < dirFiles.length; ii++) {
                 String fileOutput = dirFiles[ii].toString();
-                Log.i("OUTPUT",fileOutput);
+                Log.i("OUTPUT", fileOutput);
             }
         }
     }
