@@ -13,10 +13,17 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view_loading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_rawRes="@raw/material_wave_loading"
+            app:lottie_loop="true"
+            app:lottie_autoPlay="true" />
         <ImageView
             android:id="@+id/bigImageView"
             android:layout_width="match_parent"
+            android:transitionName="@string/transition_name"
             android:layout_height="match_parent"
             android:contentDescription="@string/this_is_a_image"
             android:scaleType="fitXY" />

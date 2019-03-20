@@ -12,10 +12,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.application.amrudesh.blazewallpaper.BuildConfig;
 import com.application.amrudesh.blazewallpaper.Data.Wallpaper;
 import com.application.amrudesh.blazewallpaper.Model.NewImageAdapter;
 import com.application.amrudesh.blazewallpaper.R;
 import com.application.amrudesh.blazewallpaper.Util.Constants;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +42,7 @@ public class FragmentTop extends Fragment {
     private RequestQueue requestQueue;
     @BindView(R.id.top_rated_recyclerview)
     RecyclerView recyclerView;
+    AdView adView;
     NewImageAdapter newImageAdapter;
 
     public FragmentTop() {
@@ -51,10 +56,22 @@ public class FragmentTop extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         ButterKnife.bind(this, view);
         getWallpaperList();
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        adView = (AdView) view.findViewById(R.id.adView);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         recyclerView.setHasFixedSize(true);
-        newImageAdapter = new NewImageAdapter(getActivity(),wallpaperList);
+        newImageAdapter = new NewImageAdapter(getActivity(), wallpaperList);
         recyclerView.setAdapter(newImageAdapter);
+
+
+        if (!BuildConfig.IS_PAID) {
+
+            AdRequest adRequest = new AdRequest.Builder()
+                    .build();
+            adView.loadAd(adRequest);
+        } else {
+           adView.setVisibility(View.GONE);
+           adView.destroy();
+        }
         return view;
     }
 

@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 28
+    flavorDimensions "default"
     defaultConfig {
         applicationId "com.application.amrudesh.blazewallpaper"
         minSdkVersion 21
@@ -26,6 +27,19 @@ android {
             {
                 sourceCompatibility JavaVersion.VERSION_1_8
                 targetCompatibility JavaVersion.VERSION_1_8
+            }
+    productFlavors
+            {
+                free
+                        {
+                            applicationId "com.application.amrudesh.blazewallpaper.free"
+                            buildConfigField 'boolean', 'IS_PAID', 'false'
+                        }
+                paid
+                        {
+                            applicationId "com.application.amrudesh.blazewallpaper.paid"
+                            buildConfigField 'boolean', 'IS_PAID', 'true'
+                        }
             }
 }
 
@@ -63,5 +77,8 @@ dependencies {
     //lifeCycle Components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.archLifecycleVersion"
+
+    //Google Ads
+    implementation 'com.google.android.gms:play-services-ads:17.2.0'
 
 }

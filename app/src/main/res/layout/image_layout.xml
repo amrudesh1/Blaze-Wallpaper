@@ -10,6 +10,7 @@
         android:layout_height="210dp"
         android:src="@color/colorAccent"
         android:scaleType="fitXY"
+        android:transitionName="@string/transition_name"
         android:paddingTop="2dp"
         android:paddingEnd="1dp"/>
 
