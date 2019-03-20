@@ -41,7 +41,7 @@ public class BigImageDisplay extends AppCompatActivity {
     MaterialButton downloadBtn;
     @BindView(R.id.save_btn)
     MaterialButton saveBtn;
-    LottieAnimationView animationView;
+    LottieAnimationView animationView,animationView2;
     Boolean isPressed;
     WallpaperViewModel wallpaperViewModel;
     Wallpaper wallpaper;
@@ -57,14 +57,16 @@ public class BigImageDisplay extends AppCompatActivity {
         url = wallpaper.getId();
         Log.i("TAG1",String.valueOf(wallpaper.getFav_Btn()));
         animationView = findViewById(R.id.animation_view);
+        animationView2=findViewById(R.id.animation_view_loading);
         isPressed = wallpaper.getFav_Btn();
         wallpaperViewModel = ViewModelProviders.of(this).get(WallpaperViewModel.class);
         checkPermission();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Picasso.get().
-                load(Constants.IMAGE_DISPLAY_LINK + url + "/1080x1920").
-                into(bigImageView);
+                load(Constants.IMAGE_DISPLAY_LINK + url + "/1080x1920")
+                .into(bigImageView);
+        animationView2.pauseAnimation();
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
