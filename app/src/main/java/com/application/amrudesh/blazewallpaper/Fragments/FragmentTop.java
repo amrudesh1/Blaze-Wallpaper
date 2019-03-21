@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -18,7 +19,6 @@ import com.application.amrudesh.blazewallpaper.Model.NewImageAdapter;
 import com.application.amrudesh.blazewallpaper.R;
 import com.application.amrudesh.blazewallpaper.Util.Constants;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import org.json.JSONArray;
@@ -44,6 +44,8 @@ public class FragmentTop extends Fragment {
     RecyclerView recyclerView;
     AdView adView;
     NewImageAdapter newImageAdapter;
+    @BindView(R.id.animation_view_main2)
+    LottieAnimationView animationView;
 
     public FragmentTop() {
     }
@@ -55,6 +57,7 @@ public class FragmentTop extends Fragment {
         wallpaperList = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         ButterKnife.bind(this, view);
+        animationView.playAnimation();
         getWallpaperList();
         adView = (AdView) view.findViewById(R.id.adView);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
@@ -98,6 +101,8 @@ public class FragmentTop extends Fragment {
                             }
                         }
                         newImageAdapter.notifyDataSetChanged();
+                        animationView.cancelAnimation();
+                        animationView.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
                     @Override

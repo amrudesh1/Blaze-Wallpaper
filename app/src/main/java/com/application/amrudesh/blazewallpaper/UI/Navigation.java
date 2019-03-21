@@ -2,17 +2,26 @@ package com.application.amrudesh.blazewallpaper.UI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.application.amrudesh.blazewallpaper.Model.ViewPageAdapter;
 import com.application.amrudesh.blazewallpaper.Fragments.FragmentAll;
 import com.application.amrudesh.blazewallpaper.Fragments.FragmentTop;
 import com.application.amrudesh.blazewallpaper.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,6 +42,7 @@ public class Navigation extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_navigation);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -42,11 +52,13 @@ public class Navigation extends AppCompatActivity
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager());
-        viewPageAdapter.AddFragments(new FragmentAll(),"Latest");
-        viewPageAdapter.AddFragments(new FragmentTop(),"Top Rated");
+        viewPageAdapter.AddFragments(new FragmentAll(), "Latest");
+        viewPageAdapter.AddFragments(new FragmentTop(), "Top Rated");
         viewPager.setAdapter(viewPageAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+        FireBaseMessaging();
         // Drawer Start From here
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -77,8 +89,8 @@ public class Navigation extends AppCompatActivity
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Intent i = new Intent(getApplicationContext(),SearchableActivity.class);
-                i.putExtra("query",query);
+                Intent i = new Intent(getApplicationContext(), SearchableActivity.class);
+                i.putExtra("query", query);
                 startActivity(i);
                 return false;
             }
@@ -110,21 +122,34 @@ public class Navigation extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-           startActivity(new Intent(this,Favourites.class));
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            startActivity(new Intent(this, Favourites.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void FireBaseMessaging() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d("TAG", msg);
+
+                    }
+                });
+
+    }
+
 }
