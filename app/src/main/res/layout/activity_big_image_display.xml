@@ -30,7 +30,6 @@
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="100dp"
             android:id="@+id/animation_view"
-            android:clickable="true"
             app:lottie_rawRes="@raw/heart"
             android:layout_gravity="end"
             android:layout_height="100dp"

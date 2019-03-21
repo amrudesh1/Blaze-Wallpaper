@@ -5,11 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.application.amrudesh.blazewallpaper.Model.ViewPageAdapter;
 import com.application.amrudesh.blazewallpaper.Fragments.FragmentAll;
 import com.application.amrudesh.blazewallpaper.Fragments.FragmentTop;
+import com.application.amrudesh.blazewallpaper.Model.ViewPageAdapter;
 import com.application.amrudesh.blazewallpaper.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

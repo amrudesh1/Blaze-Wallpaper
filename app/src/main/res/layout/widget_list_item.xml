@@ -9,6 +9,7 @@
         android:id="@+id/widgetImageView"
         android:layout_width="match_parent"
         android:src="@color/colorAccent"
+        android:contentDescription="@string/favourite_images"
         android:scaleType="centerCrop"
         android:layout_height="match_parent" />
 </RelativeLayout>

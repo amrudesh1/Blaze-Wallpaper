@@ -1,7 +1,6 @@
 package com.application.amrudesh.blazewallpaper.Fragments;
 
 import android.os.Bundle;
-import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
