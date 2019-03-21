@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "112962539763",
+    "firebase_url": "https://blazewallpaper-99302.firebaseio.com",
+    "project_id": "blazewallpaper-99302",
+    "storage_bucket": "blazewallpaper-99302.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112962539763:android:b93db2531945d0da",
+        "android_client_info": {
+          "package_name": "com.application.amrudesh.blazewallpaper.free"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112962539763-tb84460bd69i46fh8m52ghl3mvgr9l6i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.amrudesh.blazewallpaper.free",
+            "certificate_hash": "5afb00ab6139da78e0b075ffcfd213fd6cae21a5"
+          }
+        },
+        {
+          "client_id": "112962539763-vpddija3ltf77of4quqdro2f224rltp8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1pICY2VJj59NkbRwXaZg6JOgFyY6Q4BU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112962539763-vpddija3ltf77of4quqdro2f224rltp8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112962539763:android:721bae1d5254e73f",
+        "android_client_info": {
+          "package_name": "com.application.amrudesh.blazewallpaper.paid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112962539763-4ugb8kgt7s3sobk82num2mtjl8qeqk4r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.amrudesh.blazewallpaper.paid",
+            "certificate_hash": "5afb00ab6139da78e0b075ffcfd213fd6cae21a5"
+          }
+        },
+        {
+          "client_id": "112962539763-vpddija3ltf77of4quqdro2f224rltp8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1pICY2VJj59NkbRwXaZg6JOgFyY6Q4BU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112962539763-vpddija3ltf77of4quqdro2f224rltp8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
