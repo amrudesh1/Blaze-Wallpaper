@@ -2,9 +2,13 @@ package com.application.amrudesh.blazewallpaper.UI;
 
 import android.Manifest;
 import android.app.DownloadManager;
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,8 +27,10 @@ import com.application.amrudesh.blazewallpaper.R;
 import com.application.amrudesh.blazewallpaper.Util.Constants;
 import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
+import java.io.IOException;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -45,6 +51,8 @@ public class BigImageDisplay extends AppCompatActivity {
     Boolean isPressed;
     WallpaperViewModel wallpaperViewModel;
     Wallpaper wallpaper;
+    Target target;
+    Bitmap bm;
 
 
     @Override
@@ -63,9 +71,28 @@ public class BigImageDisplay extends AppCompatActivity {
         checkPermission();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                bigImageView.setImageBitmap(bitmap);
+                Bitmap.Config config;
+                bm = bitmap;
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
         Picasso.get().
-                load(Constants.IMAGE_DISPLAY_LINK + url + "/1080x1920")
-                .into(bigImageView);
+                load(Constants.IMAGE_DISPLAY_LINK + url )
+
+                .into(target);
         animationView2.pauseAnimation();
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,17 +173,28 @@ public class BigImageDisplay extends AppCompatActivity {
     }
 
     private void setWallaper() {
-        File direct = new File(Environment.DIRECTORY_PICTURES
-                + "/Blaze_Wallpapers");
-        File[] dirFiles = direct.listFiles();
-        if (dirFiles.length != 0) {
-            // loops through the array of files, outputing the name to console
-            for (int ii = 0; ii < dirFiles.length; ii++) {
-                String fileOutput = dirFiles[ii].toString();
-                Log.i("OUTPUT", fileOutput);
+
+        WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // On Android N and above use the new API to set both the general system wallpaper and
+            // the lock-screen-specific wallpaper
+            try {
+                wallpaperManager.setBitmap(bm);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                wallpaperManager.setBitmap(bm);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
+
+
+
+
 
     public void addWallpapertofav(String id, String url, String auth_name, Boolean btn) {
         Wallpaper wallpaper = new Wallpaper(id,url,auth_name,btn);

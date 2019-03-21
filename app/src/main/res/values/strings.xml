@@ -20,8 +20,10 @@
     <string name="downlaod">Downlaod</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="should_favourite_images_placed_on_home_screen">Should Favourite Images Placed On Home Screen</string>
     <string name="add_to_home_screen">Add to Home Screen</string>
     <string name="banner_ad_unit_id">ca-app-pub-3615799090878139/9515720490</string>
     <string name="transition_name">image_transition</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 </resources>

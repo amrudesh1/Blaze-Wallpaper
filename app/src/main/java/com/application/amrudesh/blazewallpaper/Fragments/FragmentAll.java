@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -43,6 +44,8 @@ public class FragmentAll extends Fragment {
     RecyclerView recyclerView;
     NewImageAdapter newImageAdapter;
     AdView adView;
+    @BindView(R.id.animation_view_main1)
+    LottieAnimationView lottieAnimationView;
 
     public FragmentAll() {
     }
@@ -55,6 +58,7 @@ public class FragmentAll extends Fragment {
         wallpaperList = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         ButterKnife.bind(this, view);
+        lottieAnimationView.playAnimation();
         wallpaperList = getWallpaperList();
         adView = (AdView) view.findViewById(R.id.adView);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
@@ -96,6 +100,7 @@ public class FragmentAll extends Fragment {
                             }
                         }
                         newImageAdapter.notifyDataSetChanged();
+                        lottieAnimationView.setVisibility(View.INVISIBLE);
                     }
                 }, new Response.ErrorListener() {
                     @Override
