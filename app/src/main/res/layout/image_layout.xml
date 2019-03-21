@@ -12,6 +12,7 @@
         android:scaleType="fitXY"
         android:transitionName="@string/transition_name"
         android:paddingTop="2dp"
-        android:paddingEnd="1dp"/>
+        android:paddingEnd="1dp"
+        android:contentDescription="@string/wallpaperimages" />
 
 </RelativeLayout>

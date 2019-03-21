@@ -4,9 +4,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -14,7 +11,6 @@ import android.widget.RemoteViewsService;
 import com.application.amrudesh.blazewallpaper.Data.Wallpaper;
 import com.application.amrudesh.blazewallpaper.R;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,7 +66,7 @@ public class WidgetRemoteService extends RemoteViewsService {
         @Override
         public RemoteViews getViewAt(int position) {
             RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
-            Log.i("TAG","REMOTEVIEW INVOKED");
+            Log.i("TAG", "REMOTEVIEW INVOKED");
             try {
                 Bitmap b = Picasso.get().load(wallpaperArrayList.get(position).getWallpaper_URL()).get();
                 views.setImageViewBitmap(R.id.widgetImageView, b);

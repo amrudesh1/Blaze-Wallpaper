@@ -26,4 +26,7 @@
     <string name="banner_ad_unit_id">ca-app-pub-3615799090878139/9515720490</string>
     <string name="transition_name">image_transition</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+    <string name="favourite_images">Favourite Images</string>
+    <string name="favourites_text">Favourites</string>
+    <string name="wallpaperimages">WallpaperImages</string>
 </resources>
