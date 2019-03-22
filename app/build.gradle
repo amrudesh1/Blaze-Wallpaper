@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'key0'
             keyPassword 'amrudeshbal'
-            storeFile file('../BlazeWallpaper.jks')
+            storeFile file("$rootDir/BlazeWallpaper.jks")
             storePassword 'amrudeshbal'
         }
     }
