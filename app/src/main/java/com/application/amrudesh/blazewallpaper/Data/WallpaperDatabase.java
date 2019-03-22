@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Wallpaper.class}, version = 1)
+@Database(entities = {Wallpaper.class}, version = 1,exportSchema = false)
 public abstract class WallpaperDatabase extends RoomDatabase {
     private static WallpaperDatabase instance;
 

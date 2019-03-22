@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'key0'
             keyPassword 'amrudeshbal'
-            storeFile file('D:/Udacity/Term 2/Examples/BlazeWallpaper/BlazeWallpaper.jks')
+            storeFile file('../BlazeWallpaper.jks')
             storePassword 'amrudeshbal'
         }
     }
