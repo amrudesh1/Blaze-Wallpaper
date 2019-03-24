@@ -32,19 +32,29 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3615799090878139~9384213773" />
 
-        <activity android:name=".UI.Favourites" />
-        <activity android:name=".UI.BigImageDisplay" />
+        <activity android:name=".UI.Favourites"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"/>
+        <activity android:name=".UI.BigImageDisplay"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"/>
         <activity
             android:name=".UI.Navigation"
             android:label="@string/title_activity_navigation"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.SearchableActivity" />
-        <activity android:name=".Widget.WidgetConfigration">
+        <activity android:name=".UI.SearchableActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation"/>
+        <activity android:name=".Widget.WidgetConfigration"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

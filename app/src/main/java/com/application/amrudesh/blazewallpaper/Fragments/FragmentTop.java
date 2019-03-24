@@ -46,6 +46,14 @@ public class FragmentTop extends Fragment {
     NewImageAdapter newImageAdapter;
     @BindView(R.id.animation_view_main2)
     LottieAnimationView animationView;
+    private GridLayoutManager gridLayoutManager;
+    private int pageNo = 1;
+    private int visibleItemCount = 0;
+    private int pastVisibleItems = 0;
+    private int total_Images = 0;
+    private int previousTotal = 0;
+    private int view_thershold = 0;
+    private Boolean isLoading = true;
 
     public FragmentTop() {
     }
@@ -58,9 +66,10 @@ public class FragmentTop extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         ButterKnife.bind(this, view);
         animationView.playAnimation();
-        getWallpaperList();
+        getWallpaperList(pageNo);
+        gridLayoutManager = new GridLayoutManager(getActivity(),3);
         adView = (AdView) view.findViewById(R.id.adView);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
         newImageAdapter = new NewImageAdapter(getActivity(), wallpaperList);
         recyclerView.setAdapter(newImageAdapter);
@@ -72,17 +81,43 @@ public class FragmentTop extends Fragment {
                     .build();
             adView.loadAd(adRequest);
         } else {
-           adView.setVisibility(View.GONE);
-           adView.destroy();
+            adView.setVisibility(View.GONE);
+            adView.destroy();
         }
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = gridLayoutManager.getChildCount();
+                total_Images = gridLayoutManager.getItemCount();
+                pastVisibleItems = gridLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isLoading) {
+                        if (total_Images > previousTotal) {
+                            isLoading = false;
+                            previousTotal = total_Images;
+                        }
+                    }
+                    if (!isLoading && (total_Images -visibleItemCount)<=pastVisibleItems + view_thershold) {
+
+                        pageNo++;
+                        getWallpaperList(pageNo);
+                        isLoading=true;
+                    }
+                }
+            }
+
+        });
         return view;
     }
 
-    private List<Wallpaper> getWallpaperList() {
+    private List<Wallpaper> getWallpaperList(int page_no) {
         JsonArrayRequest wallpaperRequest = new JsonArrayRequest
-                (Request.Method.GET, Constants.TOP_RATED_IMAGE_LINK, null, new Response.Listener<JSONArray>() {
+                (Request.Method.GET, Constants.TOP_RATED_IMAGE_LINK_LEFT + page_no + Constants.TOP_RATED_IMAGE_LINK_RIGHT
+                        , null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        Log.i("URL",Constants.TOP_RATED_IMAGE_LINK_LEFT + page_no + Constants.TOP_RATED_IMAGE_LINK_RIGHT);
                         for (int i = 0; i < response.length(); i++) {
 
                             try {
