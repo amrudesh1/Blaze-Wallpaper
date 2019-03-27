@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -49,6 +50,8 @@ public class SearchableActivity extends AppCompatActivity {
     private int previousTotal = 0;
     private int view_thershold = 0;
     private Boolean isLoading = true;
+    @BindView(R.id.search_animation)
+    LottieAnimationView animationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class SearchableActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         newImageAdapter = new NewImageAdapter(this, wallpaperList);
         recyclerView.setAdapter(newImageAdapter);
+
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -117,12 +121,19 @@ public class SearchableActivity extends AppCompatActivity {
     }
 
     private List<Wallpaper> getImages(int page_no, String search) {
+        Log.i("SIZE", "Executed");
         JsonObjectRequest wallpaperRequest = new JsonObjectRequest
                 (Request.Method.GET, Constants.Search_Link_Left + page_no + "&query=" +
                         search + Constants.Search_Link_right, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
                         try {
+                            Log.i("RESPONSE", response.getString("total"));
+                            if (response.getString("total").equals("0")) {
+                                animationView.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.GONE);
+                            }
                             JSONArray jsonArray = new JSONArray(response.getString("results"));
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -130,10 +141,17 @@ public class SearchableActivity extends AppCompatActivity {
                                 JSONObject author = new JSONObject(jsonObject.getString("user"));
                                 Wallpaper wallpaper = new Wallpaper();
                                 wallpaper.setId(jsonObject.getString("id"));
-                                wallpaper.setAuthor_name(author.getString("username"));
-                                wallpaper.setWallpaper_URL(url.getString("thumb"));
+                                wallpaper.setWallpaper_URL_Thump(url.getString("thumb"));
+                                wallpaper.setWallpaper_URL(url.getString("full"));
+                                wallpaper.setAuthor_name(author.getString("name"));
                                 wallpaper.setFav_Btn(false);
                                 wallpaperList.add(wallpaper);
+
+
+                                if (wallpaperList.isEmpty()) {
+                                    animationView.setVisibility(View.VISIBLE);
+                                    recyclerView.setVisibility(View.GONE);
+                                }
                                 Log.i("RESPONSE", wallpaper.getWallpaper_URL());
                             }
                         } catch (JSONException e) {

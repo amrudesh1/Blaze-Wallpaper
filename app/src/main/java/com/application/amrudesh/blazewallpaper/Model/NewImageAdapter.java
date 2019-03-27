@@ -59,6 +59,8 @@ public class NewImageAdapter extends RecyclerView.Adapter<NewImageAdapter.ViewHo
 
     }
 
+
+
     @Override
     public int getItemCount() {
         return wallpaperList.size();
