@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,6 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +41,14 @@ public class SearchableActivity extends AppCompatActivity {
     List<Wallpaper> wallpaperList;
     RequestQueue queue;
     NewImageAdapter newImageAdapter;
+    private GridLayoutManager gridLayoutManager;
+    private int pageNo = 1;
+    private int visibleItemCount = 0;
+    private int pastVisibleItems = 0;
+    private int total_Images = 0;
+    private int previousTotal = 0;
+    private int view_thershold = 0;
+    private Boolean isLoading = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +58,9 @@ public class SearchableActivity extends AppCompatActivity {
         SEARCH_STATEMENT = getIntent().getStringExtra("query");
         wallpaperList = new ArrayList<>();
         queue = Volley.newRequestQueue(this);
-        getImages(SEARCH_STATEMENT);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        getImages(pageNo, SEARCH_STATEMENT);
+        gridLayoutManager = new GridLayoutManager(this, 3);
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
         newImageAdapter = new NewImageAdapter(this, wallpaperList);
         recyclerView.setAdapter(newImageAdapter);
@@ -59,7 +70,7 @@ public class SearchableActivity extends AppCompatActivity {
                 SEARCH_STATEMENT = query;
                 wallpaperList.clear();
                 newImageAdapter.notifyDataSetChanged();
-                getImages(query);
+                getImages(pageNo, query);
                 return false;
             }
 
@@ -79,11 +90,36 @@ public class SearchableActivity extends AppCompatActivity {
             }
         });
         Log.i("QUERY", SEARCH_STATEMENT);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = gridLayoutManager.getChildCount();
+                total_Images = gridLayoutManager.getItemCount();
+                pastVisibleItems = gridLayoutManager.findFirstVisibleItemPosition();
+                if (dy > 0) {
+                    if (isLoading) {
+                        if (total_Images > previousTotal) {
+                            isLoading = false;
+                            previousTotal = total_Images;
+                        }
+                    }
+                    if (!isLoading && (total_Images - visibleItemCount) <= pastVisibleItems + view_thershold) {
+
+                        pageNo++;
+                        getImages(pageNo, SEARCH_STATEMENT);
+                        isLoading = true;
+                    }
+                }
+            }
+
+        });
     }
 
-    private List<Wallpaper> getImages(String search) {
+    private List<Wallpaper> getImages(int page_no, String search) {
         JsonObjectRequest wallpaperRequest = new JsonObjectRequest
-                (Request.Method.GET, Constants.Search_Link_Left + search + Constants.Search_Link_right, null, new Response.Listener<JSONObject>() {
+                (Request.Method.GET, Constants.Search_Link_Left + page_no + "&query=" +
+                        search + Constants.Search_Link_right, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -95,7 +131,7 @@ public class SearchableActivity extends AppCompatActivity {
                                 Wallpaper wallpaper = new Wallpaper();
                                 wallpaper.setId(jsonObject.getString("id"));
                                 wallpaper.setAuthor_name(author.getString("username"));
-                                wallpaper.setWallpaper_URL(url.getString("small"));
+                                wallpaper.setWallpaper_URL(url.getString("thumb"));
                                 wallpaper.setFav_Btn(false);
                                 wallpaperList.add(wallpaper);
                                 Log.i("RESPONSE", wallpaper.getWallpaper_URL());
@@ -125,4 +161,5 @@ public class SearchableActivity extends AppCompatActivity {
         searchView.setMenuItem(item);
         return true;
     }
+
 }
