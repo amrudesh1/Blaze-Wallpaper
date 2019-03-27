@@ -17,7 +17,8 @@
             android:id="@+id/animation_view_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:lottie_rawRes="@raw/material_wave_loading"
+            android:scaleType="centerCrop"
+            app:lottie_rawRes="@raw/image_loading"
             app:lottie_loop="true"
             app:lottie_autoPlay="true" />
         <ImageView
