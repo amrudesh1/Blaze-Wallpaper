@@ -4,12 +4,13 @@ import com.application.amrudesh.blazewallpaper.BuildConfig;
 
 public class Constants {
 
-    public static String IMAGE_DISPLAY_LINK = "https://source.unsplash.com/";
+    public static String IMAGE_DISPLAY_LINK_LEFT = "https://api.unsplash.com/photos/";
+    public static String IMAGE_DISPLAY_LINK_RIGHT="?client_id=" + BuildConfig.ApiKey;
 
-    public static String Search_Link_Left = "https://api.unsplash.com/search/photos?per_page=50&query=";
+    public static String Search_Link_Left = "https://api.unsplash.com/search/photos?page=";
     public static String Search_Link_right = "&client_id=" + BuildConfig.ApiKey;
-    public static String Download_Link_Left = "https://unsplash.com/photos/";
-    public static String Download_Link_Right = "/download";
+    public static String Download_Link_Left = "https://api.unsplash.com/photos/";
+    public static String Download_Link_Right = "/download"+IMAGE_DISPLAY_LINK_RIGHT;
 
     //Latest Image Link
     public static String LATEST_IMAGE_PAGINATION_NEW_LEFT = "https://api.unsplash.com/photos?page=";

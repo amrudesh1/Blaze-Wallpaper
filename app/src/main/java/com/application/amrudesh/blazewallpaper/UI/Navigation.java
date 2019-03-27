@@ -55,9 +55,6 @@ public class Navigation extends AppCompatActivity
         viewPageAdapter.AddFragments(new FragmentTop(), "Top Rated");
         viewPager.setAdapter(viewPageAdapter);
         tabLayout.setupWithViewPager(viewPager);
-
-        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
-        FireBaseMessaging();
         // Drawer Start From here
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -129,26 +126,7 @@ public class Navigation extends AppCompatActivity
         return true;
     }
 
-    private void FireBaseMessaging() {
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("TAG", "getInstanceId failed", task.getException());
-                            return;
-                        }
 
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
 
-                        // Log and toast
-                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d("TAG", msg);
-
-                    }
-                });
-
-    }
 
 }

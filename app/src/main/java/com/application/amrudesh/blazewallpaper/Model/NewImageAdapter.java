@@ -53,7 +53,7 @@ public class NewImageAdapter extends RecyclerView.Adapter<NewImageAdapter.ViewHo
     public void onBindViewHolder(@NonNull NewImageAdapter.ViewHolder holder, int position) {
         wallpaper = wallpaperList.get(position);
         Picasso.get()
-                .load(wallpaper.getWallpaper_URL())
+                .load(wallpaper.getWallpaper_URL_Thump())
                 .into(holder.mainImage);
 
 

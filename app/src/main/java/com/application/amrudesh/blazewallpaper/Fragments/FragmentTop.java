@@ -67,7 +67,7 @@ public class FragmentTop extends Fragment {
         ButterKnife.bind(this, view);
         animationView.playAnimation();
         getWallpaperList(pageNo);
-        gridLayoutManager = new GridLayoutManager(getActivity(),3);
+        gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         adView = (AdView) view.findViewById(R.id.adView);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
@@ -98,11 +98,11 @@ public class FragmentTop extends Fragment {
                             previousTotal = total_Images;
                         }
                     }
-                    if (!isLoading && (total_Images -visibleItemCount)<=pastVisibleItems + view_thershold) {
+                    if (!isLoading && (total_Images - visibleItemCount) <= pastVisibleItems + view_thershold) {
 
                         pageNo++;
                         getWallpaperList(pageNo);
-                        isLoading=true;
+                        isLoading = true;
                     }
                 }
             }
@@ -117,7 +117,7 @@ public class FragmentTop extends Fragment {
                         , null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.i("URL",Constants.TOP_RATED_IMAGE_LINK_LEFT + page_no + Constants.TOP_RATED_IMAGE_LINK_RIGHT);
+                        Log.i("URL", Constants.TOP_RATED_IMAGE_LINK_LEFT + page_no + Constants.TOP_RATED_IMAGE_LINK_RIGHT);
                         for (int i = 0; i < response.length(); i++) {
 
                             try {
@@ -126,7 +126,8 @@ public class FragmentTop extends Fragment {
                                 JSONObject author = new JSONObject(jsonObject.getString("user"));
                                 Wallpaper wallpaper = new Wallpaper();
                                 wallpaper.setId(jsonObject.getString("id"));
-                                wallpaper.setWallpaper_URL(url.getString("small"));
+                                wallpaper.setWallpaper_URL_Thump(url.getString("thumb"));
+                                wallpaper.setWallpaper_URL(url.getString("full"));
                                 wallpaper.setAuthor_name(author.getString("name"));
                                 wallpaper.setFav_Btn(false);
                                 wallpaperList.add(wallpaper);

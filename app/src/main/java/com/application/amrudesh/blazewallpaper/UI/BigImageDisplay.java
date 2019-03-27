@@ -20,6 +20,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.application.amrudesh.blazewallpaper.Data.Wallpaper;
 import com.application.amrudesh.blazewallpaper.Data.WallpaperViewModel;
 import com.application.amrudesh.blazewallpaper.R;
@@ -27,6 +33,9 @@ import com.application.amrudesh.blazewallpaper.Util.Constants;
 import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,12 +55,13 @@ public class BigImageDisplay extends AppCompatActivity {
     MaterialButton downloadBtn;
     @BindView(R.id.save_btn)
     MaterialButton saveBtn;
-    LottieAnimationView animationView,animationView2;
+    LottieAnimationView animationView, animationView2;
     Boolean isPressed;
     WallpaperViewModel wallpaperViewModel;
     Wallpaper wallpaper;
     Target target;
     Bitmap bm;
+    RequestQueue requestQueue;
 
 
     @Override
@@ -60,11 +70,12 @@ public class BigImageDisplay extends AppCompatActivity {
         setContentView(R.layout.activity_big_image_display);
         ButterKnife.bind(this);
         getSupportActionBar().hide();
-        wallpaper =(Wallpaper)getIntent().getSerializableExtra("URL");
+        requestQueue = Volley.newRequestQueue(this);
+        wallpaper = (Wallpaper) getIntent().getSerializableExtra("URL");
         url = wallpaper.getId();
-        Log.i("TAG1",String.valueOf(wallpaper.getFav_Btn()));
+        Log.i("WALLPAPER",wallpaper.getWallpaper_URL());
         animationView = findViewById(R.id.animation_view);
-        animationView2=findViewById(R.id.animation_view_loading);
+        animationView2 = findViewById(R.id.animation_view_loading);
         isPressed = wallpaper.getFav_Btn();
         wallpaperViewModel = ViewModelProviders.of(this).get(WallpaperViewModel.class);
         checkPermission();
@@ -88,15 +99,15 @@ public class BigImageDisplay extends AppCompatActivity {
 
             }
         };
-        Picasso.get().
-                load(Constants.IMAGE_DISPLAY_LINK + url )
-
+        Picasso.get()
+                .load(wallpaper.getWallpaper_URL())
                 .into(target);
+
         animationView2.pauseAnimation();
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StartDownload();
+                getWallpaperList(url);
             }
         });
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -112,8 +123,8 @@ public class BigImageDisplay extends AppCompatActivity {
                 if (!isPressed) {
                     animationView.playAnimation();
                     isPressed = true;
-                    Log.i("tag",String.valueOf(isPressed));
-                    addWallpapertofav(wallpaper.getId(),wallpaper.getWallpaper_URL(),wallpaper.getAuthor_name(),isPressed);
+                    Log.i("tag", String.valueOf(isPressed));
+                    addWallpapertofav(wallpaper.getId(), wallpaper.getWallpaper_URL(),wallpaper.getWallpaper_URL_Thump(),wallpaper.getAuthor_name(), isPressed);
                     Toast.makeText(BigImageDisplay.this, "Image Added To Favourites", Toast.LENGTH_LONG).show();
                 } else {
                     animationView.setProgress(0);
@@ -148,20 +159,20 @@ public class BigImageDisplay extends AppCompatActivity {
         }
     }
 
-    private void StartDownload() {
+    private void StartDownload(String download_url) {
         File direct = new File(Environment.DIRECTORY_PICTURES
                 + "/Blaze_Wallpapers");
 
         if (!direct.exists()) {
             direct.mkdirs();
         }
-        String download_url = Constants.Download_Link_Left + url + Constants.Download_Link_Right;
+
         Log.i("TAG", download_url);
         DownloadManager.Request request =
                 new DownloadManager.Request(Uri.parse(download_url));
         request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
         request.setTitle(url);
-        request.setDescription("Download File");
+        request.setDescription("Downloading Image");
         request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Blaze_Wallpapers", url + ".jpg");
@@ -192,28 +203,46 @@ public class BigImageDisplay extends AppCompatActivity {
     }
 
 
-
-
-
-    public void addWallpapertofav(String id, String url, String auth_name, Boolean btn) {
-        Wallpaper wallpaper = new Wallpaper(id,url,auth_name,btn);
+    public void addWallpapertofav(String id, String url,String thump,String auth_name, Boolean btn) {
+        Wallpaper wallpaper = new Wallpaper(id, url, thump, auth_name, btn);
         wallpaperViewModel.insert(wallpaper);
     }
-    public void deleteWallpaper()
-    {
+
+    public void deleteWallpaper() {
         wallpaperViewModel.delete(wallpaper);
     }
 
-    public  void btnStatus()
-    {
-        if (isPressed)
-        {
+    public void btnStatus() {
+        if (isPressed) {
             animationView.playAnimation();
             animationView.setProgress(1.0f);
-        }
-        else
-        {
+        } else {
             animationView.setProgress(0f);
         }
+    }
+
+    private void getWallpaperList(String id) {
+
+        JsonObjectRequest wallpaperRequest = new JsonObjectRequest
+                (Request.Method.GET,
+                        Constants.Download_Link_Left + id + Constants.Download_Link_Right, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            StartDownload(response.getString("url"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        requestQueue.add(wallpaperRequest);
     }
 }

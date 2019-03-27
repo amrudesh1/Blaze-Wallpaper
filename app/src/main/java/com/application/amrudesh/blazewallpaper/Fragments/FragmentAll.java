@@ -124,7 +124,8 @@ public class FragmentAll extends Fragment {
                                 JSONObject author = new JSONObject(jsonObject.getString("user"));
                                 Wallpaper wallpaper = new Wallpaper();
                                 wallpaper.setId(jsonObject.getString("id"));
-                                wallpaper.setWallpaper_URL(url.getString("small"));
+                                wallpaper.setWallpaper_URL_Thump(url.getString("thumb"));
+                                wallpaper.setWallpaper_URL(url.getString("full"));
                                 wallpaper.setAuthor_name(author.getString("name"));
                                 wallpaper.setFav_Btn(false);
                                 wallpaperList.add(wallpaper);
