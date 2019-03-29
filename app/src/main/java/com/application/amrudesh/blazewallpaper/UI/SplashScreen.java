@@ -12,11 +12,13 @@ import android.widget.TextView;
 
 import com.application.amrudesh.blazewallpaper.R;
 import com.application.amrudesh.blazewallpaper.Util.Prefs;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.material.button.MaterialButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.fabric.sdk.android.Fabric;
 
 public class SplashScreen extends AppCompatActivity {
     RelativeLayout Layout1, Layout2;
@@ -34,6 +36,7 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash_screen);
         ButterKnife.bind(this);
         getDisplayMetrics();

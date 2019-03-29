@@ -1,67 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".UI.BigImageDisplay">
-
-
-
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_view_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:lottie_rawRes="@raw/image_loading"
+            app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_autoPlay="true" />
+            app:lottie_rawRes="@raw/image_loading" />
+
         <ImageView
             android:id="@+id/bigImageView"
             android:layout_width="match_parent"
-            android:transitionName="@string/transition_name"
             android:layout_height="match_parent"
             android:contentDescription="@string/this_is_a_image"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:transitionName="@string/transition_name" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/swipe_right_animation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/swipe" />
+        </FrameLayout>
+
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="100dp"
             android:id="@+id/animation_view"
-            app:lottie_rawRes="@raw/heart"
-            android:layout_gravity="end"
+            android:layout_width="100dp"
             android:layout_height="100dp"
-            />
-        <LinearLayout
+            android:layout_gravity="end"
+            app:lottie_rawRes="@raw/heart" />
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:alpha="0.7"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:background="@android:color/black">
+            android:layout_gravity="bottom|end">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/download_btn"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/down_linear"
                 android:layout_gravity="bottom"
-                android:layout_weight="1.0"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:text="@string/downlaod" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/save_btn"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
+                android:alpha="0.7"
+                android:background="@android:color/black"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/download_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1.0"
+                    android:text="@string/downlaod" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/save_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/set_image" />
+
+
+            </LinearLayout>
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView_big"
+                android:layout_below="@id/down_linear"
+                android:layout_width="match_parent"
+                android:layout_centerInParent="true"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="@string/set_image" />
-        </LinearLayout>
+                app:adSize="BANNER"
+                ads:adUnitId="@string/banner_ad_unit_id" />
+
+        </RelativeLayout>
+
     </FrameLayout>
 
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

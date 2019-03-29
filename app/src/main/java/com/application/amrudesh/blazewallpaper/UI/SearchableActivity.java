@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -53,6 +54,7 @@ public class SearchableActivity extends AppCompatActivity {
     @BindView(R.id.search_animation)
     LottieAnimationView animationView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,6 @@ public class SearchableActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         newImageAdapter = new NewImageAdapter(this, wallpaperList);
         recyclerView.setAdapter(newImageAdapter);
-
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -75,6 +76,7 @@ public class SearchableActivity extends AppCompatActivity {
                 wallpaperList.clear();
                 newImageAdapter.notifyDataSetChanged();
                 getImages(pageNo, query);
+
                 return false;
             }
 
@@ -122,6 +124,8 @@ public class SearchableActivity extends AppCompatActivity {
 
     private List<Wallpaper> getImages(int page_no, String search) {
         Log.i("SIZE", "Executed");
+        animationView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         JsonObjectRequest wallpaperRequest = new JsonObjectRequest
                 (Request.Method.GET, Constants.Search_Link_Left + page_no + "&query=" +
                         search + Constants.Search_Link_right, null, new Response.Listener<JSONObject>() {
@@ -141,6 +145,7 @@ public class SearchableActivity extends AppCompatActivity {
                                 JSONObject author = new JSONObject(jsonObject.getString("user"));
                                 Wallpaper wallpaper = new Wallpaper();
                                 wallpaper.setId(jsonObject.getString("id"));
+                                wallpaper.setPortFolio_url(author.getString("portfolio_url"));
                                 wallpaper.setWallpaper_URL_Thump(url.getString("thumb"));
                                 wallpaper.setWallpaper_URL(url.getString("full"));
                                 wallpaper.setAuthor_name(author.getString("name"));
@@ -157,7 +162,9 @@ public class SearchableActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                         newImageAdapter.notifyDataSetChanged();
+
                     }
 
 
