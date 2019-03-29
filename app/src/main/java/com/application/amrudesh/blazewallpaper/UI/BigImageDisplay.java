@@ -12,11 +12,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -26,10 +29,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.application.amrudesh.blazewallpaper.BuildConfig;
 import com.application.amrudesh.blazewallpaper.Data.Wallpaper;
 import com.application.amrudesh.blazewallpaper.Data.WallpaperViewModel;
 import com.application.amrudesh.blazewallpaper.R;
 import com.application.amrudesh.blazewallpaper.Util.Constants;
+import com.application.amrudesh.blazewallpaper.Util.Prefs;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -40,6 +48,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -55,32 +64,70 @@ public class BigImageDisplay extends AppCompatActivity {
     MaterialButton downloadBtn;
     @BindView(R.id.save_btn)
     MaterialButton saveBtn;
-    LottieAnimationView animationView, animationView2;
+    LottieAnimationView animationView, animationView2, animationView3;
     Boolean isPressed;
     WallpaperViewModel wallpaperViewModel;
     Wallpaper wallpaper;
     Target target;
     Bitmap bm;
     RequestQueue requestQueue;
+    Prefs prefs;
+    @BindView(R.id.adView_big)
+    AdView adViewBig;
 
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x1 = 0, x2, y1, y2;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                y2 = event.getY();
+                if (x1 < x2) {
+                    showDialog();
+                    prefs.setSwipeStatus(true);
+                    animationView3.setVisibility(View.GONE);
+                    animationView3.cancelAnimation();
+                    Toast.makeText(this, "Right Swipe", Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_big_image_display);
         ButterKnife.bind(this);
+        prefs = new Prefs(this);
         getSupportActionBar().hide();
         requestQueue = Volley.newRequestQueue(this);
         wallpaper = (Wallpaper) getIntent().getSerializableExtra("URL");
         url = wallpaper.getId();
-        Log.i("WALLPAPER",wallpaper.getWallpaper_URL());
+        Log.i("WALLPAPER", wallpaper.getWallpaper_URL());
         animationView = findViewById(R.id.animation_view);
         animationView2 = findViewById(R.id.animation_view_loading);
+        animationView3 = findViewById(R.id.swipe_right_animation);
         isPressed = wallpaper.getFav_Btn();
         wallpaperViewModel = ViewModelProviders.of(this).get(WallpaperViewModel.class);
         checkPermission();
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        if (!BuildConfig.IS_PAID) {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .build();
+            adViewBig.loadAd(adRequest);
+        } else {
+            adViewBig.setVisibility(View.GONE);
+            adViewBig.destroy();
+        }
         target = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -103,7 +150,7 @@ public class BigImageDisplay extends AppCompatActivity {
                 .load(wallpaper.getWallpaper_URL())
                 .into(target);
 
-        animationView2.pauseAnimation();
+        animationView2.cancelAnimation();
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,7 +171,7 @@ public class BigImageDisplay extends AppCompatActivity {
                     animationView.playAnimation();
                     isPressed = true;
                     Log.i("tag", String.valueOf(isPressed));
-                    addWallpapertofav(wallpaper.getId(), wallpaper.getWallpaper_URL(),wallpaper.getWallpaper_URL_Thump(),wallpaper.getAuthor_name(), isPressed);
+                    addWallpapertofav(wallpaper.getId(), wallpaper.getWallpaper_URL(), wallpaper.getPortFolio_url(), wallpaper.getWallpaper_URL_Thump(), wallpaper.getAuthor_name(), isPressed);
                     Toast.makeText(BigImageDisplay.this, "Image Added To Favourites", Toast.LENGTH_LONG).show();
                 } else {
                     animationView.setProgress(0);
@@ -134,6 +181,15 @@ public class BigImageDisplay extends AppCompatActivity {
                 }
             }
         });
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                myTask();
+            }
+        }, 8000);
+
+
     }
 
     private void checkPermission() {
@@ -203,8 +259,8 @@ public class BigImageDisplay extends AppCompatActivity {
     }
 
 
-    public void addWallpapertofav(String id, String url,String thump,String auth_name, Boolean btn) {
-        Wallpaper wallpaper = new Wallpaper(id, url, thump, auth_name, btn);
+    public void addWallpapertofav(String id, String url, String port_link, String thump, String auth_name, Boolean btn) {
+        Wallpaper wallpaper = new Wallpaper(id, url, port_link, thump, auth_name, btn);
         wallpaperViewModel.insert(wallpaper);
     }
 
@@ -244,5 +300,32 @@ public class BigImageDisplay extends AppCompatActivity {
                 });
 
         requestQueue.add(wallpaperRequest);
+    }
+
+    private void showDialog() {
+        TextView auth_name;
+        TextView portfolio_link;
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.infolayout, null);
+        auth_name = view.findViewById(R.id.author_name);
+        portfolio_link = view.findViewById(R.id.portfolio);
+        auth_name.setText("Author Name:" + " " + wallpaper.getAuthor_name());
+        portfolio_link.setText("Portfolio Link:" + " " + wallpaper.getPortFolio_url());
+        alertDialogBuilder.setView(view);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void myTask() {
+        if (prefs.getSwipeStatus()) {
+            animationView3.setVisibility(View.GONE);
+            animationView3.cancelAnimation();
+            Log.i("TASK", "EXECUTED if");
+        } else {
+            animationView3.setVisibility(View.VISIBLE);
+            Log.i("TASK", "EXECUTED ELSE");
+            animationView3.playAnimation();
+        }
+
     }
 }

@@ -8,6 +8,10 @@
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_favorite"
             android:title="@string/favourites_text" />
+        <item
+            android:id="@+id/removeAds"
+            android:icon="@drawable/premium"
+            android:title="@string/removeads"/>
 
     </group>
 

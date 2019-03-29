@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:112962539763:android:b93db2531945d0da",
+        "mobilesdk_app_id": "1:112962539763:android:1c5ee92f0df7a019",
         "android_client_info": {
-          "package_name": "com.application.amrudesh.blazewallpaper.free"
+          "package_name": "com.application.amrudesh.blazewallpaper"
         }
       },
       "oauth_client": [
         {
-          "client_id": "112962539763-tb84460bd69i46fh8m52ghl3mvgr9l6i.apps.googleusercontent.com",
+          "client_id": "112962539763-hitkifm6f4298c4rmstih7aio5vakkm7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.application.amrudesh.blazewallpaper.free",
-            "certificate_hash": "5afb00ab6139da78e0b075ffcfd213fd6cae21a5"
+            "package_name": "com.application.amrudesh.blazewallpaper",
+            "certificate_hash": "6feacf164f165f41f49fef8877f4405db3a51546"
           }
         },
         {
@@ -52,6 +52,51 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:112962539763:android:b93db2531945d0da",
+        "android_client_info": {
+          "package_name": "com.application.amrudesh.blazewallpaper.free"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112962539763-i73t6loqf8kt8mkq81lrl3fsr7h43q5s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.amrudesh.blazewallpaper.free",
+            "certificate_hash": "6feacf164f165f41f49fef8877f4405db3a51546"
+          }
+        },
+        {
+          "client_id": "112962539763-vpddija3ltf77of4quqdro2f224rltp8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1pICY2VJj59NkbRwXaZg6JOgFyY6Q4BU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112962539763-vpddija3ltf77of4quqdro2f224rltp8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      },
+      "admob_app_id": "ca-app-pub-3615799090878139~9384213773"
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:112962539763:android:721bae1d5254e73f",
         "android_client_info": {
           "package_name": "com.application.amrudesh.blazewallpaper.paid"
@@ -59,11 +104,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "112962539763-4ugb8kgt7s3sobk82num2mtjl8qeqk4r.apps.googleusercontent.com",
+          "client_id": "112962539763-jg44h5lqu71vr399tgf36r0okgvit696.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.application.amrudesh.blazewallpaper.paid",
-            "certificate_hash": "5afb00ab6139da78e0b075ffcfd213fd6cae21a5"
+            "certificate_hash": "6feacf164f165f41f49fef8877f4405db3a51546"
           }
         },
         {

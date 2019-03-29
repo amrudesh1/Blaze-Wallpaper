@@ -33,6 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -46,6 +47,8 @@ public class FragmentTop extends Fragment {
     NewImageAdapter newImageAdapter;
     @BindView(R.id.animation_view_main2)
     LottieAnimationView animationView;
+    @BindView(R.id.toprated_refresh)
+    SwipeRefreshLayout layout2;
     private GridLayoutManager gridLayoutManager;
     private int pageNo = 1;
     private int visibleItemCount = 0;
@@ -84,6 +87,15 @@ public class FragmentTop extends Fragment {
             adView.setVisibility(View.GONE);
             adView.destroy();
         }
+        layout2.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                wallpaperList.clear();
+                getWallpaperList(1);
+                newImageAdapter.notifyDataSetChanged();
+
+            }
+        });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -128,6 +140,7 @@ public class FragmentTop extends Fragment {
                                 wallpaper.setId(jsonObject.getString("id"));
                                 wallpaper.setWallpaper_URL_Thump(url.getString("thumb"));
                                 wallpaper.setWallpaper_URL(url.getString("full"));
+                                wallpaper.setPortFolio_url(author.getString("portfolio_url"));
                                 wallpaper.setAuthor_name(author.getString("name"));
                                 wallpaper.setFav_Btn(false);
                                 wallpaperList.add(wallpaper);
@@ -139,6 +152,7 @@ public class FragmentTop extends Fragment {
                         newImageAdapter.notifyDataSetChanged();
                         animationView.cancelAnimation();
                         animationView.setVisibility(View.GONE);
+                        layout2.setRefreshing(false);
                     }
                 }, new Response.ErrorListener() {
                     @Override

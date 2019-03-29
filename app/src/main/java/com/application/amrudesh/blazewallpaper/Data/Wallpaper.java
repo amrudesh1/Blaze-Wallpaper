@@ -15,11 +15,13 @@ public class Wallpaper implements Serializable {
     private String wallpaper_URL;
     private String wallpaper_URL_Thump;
     private String author_name;
+    private String portFolio_url;
     private Boolean fav_Btn;
 
-    public Wallpaper(String id, String wallpaper_URL, String wallpaper_URL_Thump, String author_name, Boolean fav_Btn) {
+    public Wallpaper(String id, String wallpaper_URL, String portFolio_url, String wallpaper_URL_Thump, String author_name, Boolean fav_Btn) {
         this.id = id;
         this.wallpaper_URL = wallpaper_URL;
+        this.portFolio_url = portFolio_url;
         this.wallpaper_URL_Thump = wallpaper_URL_Thump;
         this.author_name = author_name;
         this.fav_Btn = fav_Btn;
@@ -63,6 +65,14 @@ public class Wallpaper implements Serializable {
 
     public String getWallpaper_URL_Thump() {
         return wallpaper_URL_Thump;
+    }
+
+    public String getPortFolio_url() {
+        return portFolio_url;
+    }
+
+    public void setPortFolio_url(String portFolio_url) {
+        this.portFolio_url = portFolio_url;
     }
 
     public void setWallpaper_URL_Thump(String wallpaper_URL_Thump) {

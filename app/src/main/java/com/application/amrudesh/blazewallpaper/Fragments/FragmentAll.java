@@ -33,6 +33,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -46,6 +47,8 @@ public class FragmentAll extends Fragment {
     @BindView(R.id.animation_view_main1)
     LottieAnimationView lottieAnimationView;
     GridLayoutManager gridLayoutManager;
+    @BindView(R.id.new_refresh)
+    SwipeRefreshLayout swipeRefreshLayout1;
     private int pageNo = 1;
     private int visibleItemCount = 0;
     private int pastVisibleItems = 0;
@@ -82,6 +85,14 @@ public class FragmentAll extends Fragment {
             adView.setVisibility(View.GONE);
             adView.destroy();
         }
+        swipeRefreshLayout1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                wallpaperList.clear();
+                getWallpaperList(1);
+                newImageAdapter.notifyDataSetChanged();
+            }
+        });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -125,17 +136,18 @@ public class FragmentAll extends Fragment {
                                 Wallpaper wallpaper = new Wallpaper();
                                 wallpaper.setId(jsonObject.getString("id"));
                                 wallpaper.setWallpaper_URL_Thump(url.getString("thumb"));
+                                wallpaper.setPortFolio_url(author.getString("portfolio_url"));
                                 wallpaper.setWallpaper_URL(url.getString("full"));
                                 wallpaper.setAuthor_name(author.getString("name"));
                                 wallpaper.setFav_Btn(false);
                                 wallpaperList.add(wallpaper);
-                                Log.i("TAG", wallpaper.getId());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
                         newImageAdapter.notifyDataSetChanged();
                         lottieAnimationView.setVisibility(View.INVISIBLE);
+                        swipeRefreshLayout1.setRefreshing(false);
                     }
                 }, new Response.ErrorListener() {
                     @Override
