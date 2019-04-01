@@ -9,16 +9,19 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +39,6 @@ import com.application.amrudesh.blazewallpaper.R;
 import com.application.amrudesh.blazewallpaper.Util.Constants;
 import com.application.amrudesh.blazewallpaper.Util.Prefs;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
@@ -45,6 +47,8 @@ import com.squareup.picasso.Target;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -74,6 +78,13 @@ public class BigImageDisplay extends AppCompatActivity {
     Prefs prefs;
     @BindView(R.id.adView_big)
     AdView adViewBig;
+    @BindView(R.id.home_screen_btn)
+    ImageView home;
+    @BindView(R.id.lock_screen_btn)
+    ImageView lock;
+    Boolean visibility = false;
+    static WallpaperManager wallpaperManager;
+    static ProgressBar progressBar;
 
 
     @Override
@@ -110,13 +121,16 @@ public class BigImageDisplay extends AppCompatActivity {
         wallpaper = (Wallpaper) getIntent().getSerializableExtra("URL");
         url = wallpaper.getId();
         Log.i("WALLPAPER", wallpaper.getWallpaper_URL());
+        progressBar = findViewById(R.id.progress_circular);
         animationView = findViewById(R.id.animation_view);
         animationView2 = findViewById(R.id.animation_view_loading);
         animationView3 = findViewById(R.id.swipe_right_animation);
         isPressed = wallpaper.getFav_Btn();
         wallpaperViewModel = ViewModelProviders.of(this).get(WallpaperViewModel.class);
         checkPermission();
-
+        wallpaperManager = WallpaperManager.getInstance(BigImageDisplay.this);
+        progressBar.setVisibility(View.GONE);
+        progressBar.setMax(100);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -160,7 +174,7 @@ public class BigImageDisplay extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setWallaper();
+                setWallaper(visibility);
             }
         });
         btnStatus();
@@ -187,8 +201,14 @@ public class BigImageDisplay extends AppCompatActivity {
             public void run() {
                 myTask();
             }
-        }, 8000);
+        }, 15000);
 
+        lock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new setLockScreen().execute(bm);
+            }
+        });
 
     }
 
@@ -238,24 +258,31 @@ public class BigImageDisplay extends AppCompatActivity {
 
     }
 
-    private void setWallaper() {
+    private void setWallaper(Boolean visibile) {
+        downloadBtn.setVisibility(View.GONE);
+        saveBtn.setVisibility(View.GONE);
+        new Handler().postDelayed(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!visibile) {
+                            downloadBtn.setVisibility(View.GONE);
+                            saveBtn.setVisibility(View.GONE);
+                            home.setVisibility(View.VISIBLE);
+                            lock.setVisibility(View.VISIBLE);
+                            visibility = true;
+                        } else {
+                            downloadBtn.setVisibility(View.VISIBLE);
+                            saveBtn.setVisibility(View.VISIBLE);
+                            home.setVisibility(View.GONE);
+                            lock.setVisibility(View.GONE);
+                            visibility = false;
+                        }
+                    }
+                }
+                , 500);
 
-        WallpaperManager wallpaperManager = WallpaperManager.getInstance(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            // On Android N and above use the new API to set both the general system wallpaper and
-            // the lock-screen-specific wallpaper
-            try {
-                wallpaperManager.setBitmap(bm);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                wallpaperManager.setBitmap(bm);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 
 
@@ -302,6 +329,13 @@ public class BigImageDisplay extends AppCompatActivity {
         requestQueue.add(wallpaperRequest);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setWallaper(visibility);
+    }
+
+
     private void showDialog() {
         TextView auth_name;
         TextView portfolio_link;
@@ -328,4 +362,58 @@ public class BigImageDisplay extends AppCompatActivity {
         }
 
     }
+
+    private void setLockScreenWallpaper() {
+
+
+    }
+
+    private static class setLockScreen extends AsyncTask<Bitmap, Integer, Void> {
+        int count = 0;
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+            Log.i("COMPLETED", String.valueOf(values[0]));
+        }
+
+        @Override
+        protected Void doInBackground(Bitmap... bitmaps) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            Log.i("BITMAP", String.valueOf(bitmaps[0].getByteCount()));
+            bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            byte[] bitmapdata = bos.toByteArray();
+            ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                try {
+                    Log.i("WALLPAPER", String.valueOf(wallpaperManager.getDesiredMinimumHeight()
+                            + ":" + wallpaperManager.getDesiredMinimumWidth()));
+                    /*   wallpaperManager.setBitmap(bitmaps[0], null, true, WallpaperManager.FLAG_LOCK);*/
+                    wallpaperManager.setStream(bs, null, true, WallpaperManager.FLAG_LOCK);
+                    while (count < 5) {
+                        SystemClock.sleep(1000);
+                        count++;
+                        publishProgress(count * 20);
+                    }
+
+
+                } catch (IOException e) {
+                    Log.i("COMPLETED", e.toString());
+                }
+
+
+            }
+
+            return null;
+        }
+    }
 }
+

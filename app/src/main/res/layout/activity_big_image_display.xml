@@ -21,6 +21,7 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/image_loading" />
 
+
         <ImageView
             android:id="@+id/bigImageView"
             android:layout_width="match_parent"
@@ -28,6 +29,12 @@
             android:contentDescription="@string/this_is_a_image"
             android:scaleType="centerCrop"
             android:transitionName="@string/transition_name" />
+
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -55,14 +62,38 @@
             android:layout_gravity="bottom|end">
 
             <LinearLayout
+                android:id="@+id/down_linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/down_linear"
                 android:layout_gravity="bottom"
                 android:alpha="0.7"
                 android:background="@android:color/black"
                 android:orientation="horizontal"
                 android:weightSum="2">
+
+                <ImageView
+                    android:id="@+id/home_screen_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginEnd="5dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/homescreen"
+                    android:focusable="true"
+                    android:src="@drawable/home"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/lock_screen_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="100dp"
+                    android:clickable="true"
+                    android:contentDescription="@string/lockscreen"
+                    android:focusable="true"
+                    android:src="@drawable/lock"
+                    android:visibility="gone" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/download_btn"
@@ -71,7 +102,7 @@
                     android:layout_gravity="bottom"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
-                    android:layout_weight="1.0"
+                    android:layout_weight="1"
                     android:text="@string/downlaod" />
 
                 <com.google.android.material.button.MaterialButton
@@ -87,12 +118,12 @@
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView_big"
-                android:layout_below="@id/down_linear"
                 android:layout_width="match_parent"
-                android:layout_centerInParent="true"
                 android:layout_height="wrap_content"
-                app:adSize="BANNER"
-                ads:adUnitId="@string/banner_ad_unit_id" />
+                android:layout_below="@id/down_linear"
+                android:layout_centerInParent="true"
+                ads:adUnitId="@string/banner_ad_unit_id"
+                app:adSize="BANNER" />
 
         </RelativeLayout>
 
